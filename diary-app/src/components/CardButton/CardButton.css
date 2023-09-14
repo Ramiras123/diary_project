@@ -8,6 +8,7 @@
 	display: block;
 	color: white;
 	background: rgba(255, 255, 255, 0.03);
+	width: 100%;
 }
 .card-button:hover {
 	background: rgba(255, 255, 255, 0.1);
