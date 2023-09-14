@@ -44,12 +44,12 @@ function JorunalForm({ onSubmit }) {
 				<input
 					type="title"
 					name="title"
-					style={{ border: formValidState.title ? undefined : '3px solid red' }}
+					className={`input ${formValidState.title ? '' : 'invalid'}`}
 				/>
 				<input
 					type="date"
 					name="date"
-					style={{ border: formValidState.date ? undefined : '3px solid red' }}
+					className={`input ${formValidState.date ? '' : 'invalid'}`}
 				/>
 				<input type="text" name="tag" />
 				<textarea
@@ -57,7 +57,7 @@ function JorunalForm({ onSubmit }) {
 					id=""
 					cols="30"
 					rows="10"
-					style={{ border: formValidState.text ? undefined : '3px solid red' }}
+					className={`input ${formValidState.text ? '' : 'invalid'}`}
 				></textarea>
 				<Button text={'Сохранить'}></Button>
 			</form>
