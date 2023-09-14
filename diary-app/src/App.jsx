@@ -1,51 +1,52 @@
 import './App.css';
-import Button from './components/Button/Button.jsx';
-import JournalItem from './Journalitem/Journalitem';
-import CardButton from './components/CardButton/CardButton';
 import LeftPanel from './layouts/LeftPanel/LeftPanel';
 import Body from './layouts/Body/Body';
 import Header from './components/Header/Header';
 import JournalList from './components/JournalList/JournalList';
 import JournalAddButton from './components/JournalAddButton/JournalAddButton';
+import JorunalForm from './components/JournalForm/JournalForm';
+import { useState } from 'react';
+
+const INITIAL_DATA = [
+	// {
+	// 	id: 1,
+	// 	title: 'Подготовка к обновлению курсов',
+	// 	date: new Date(),
+	// 	text: 'Сегодня провёл весь день за...'
+	// },
+	// {
+	// 	id: 2,
+	// 	title: 'Поход в годы',
+	// 	date: new Date(),
+	// 	text: 'Думал, что очень много време...'
+	// }
+];
 
 function App() {
-	const data = [
-		{
-			title: 'Подготовка к обновлению курсов',
-			date: new Date(),
-			text: 'Сегодня провёл весь день за...'
-		},
-		{
-			title: 'Поход в годы',
-			date: new Date(),
-			text: 'Думал, что очень много време...'
-		}
-	];
+	const [items, setItems] = useState(INITIAL_DATA);
+
+	const pushItem = (item) => {
+		setItems((oldItems) => [
+			...oldItems,
+			{
+				text: item.text,
+				title: item.title,
+				date: new Date(item.date),
+				id: oldItems.length > 0 ? Math.max(...oldItems.map((i) => i.id)) + 1 : 1
+			}
+		]);
+	};
+
 	return (
 		<>
 			<div className="app">
 				<LeftPanel>
 					<Header />
 					<JournalAddButton />
-					<JournalList>
-						<CardButton>
-							<JournalItem
-								title={data[0].title}
-								date={data[0].date}
-								text={data[0].text}
-							/>
-						</CardButton>
-						<CardButton>
-							<JournalItem
-								title={data[1].title}
-								date={data[1].date}
-								text={data[1].text}
-							/>
-						</CardButton>
-					</JournalList>
+					<JournalList items={items}></JournalList>
 				</LeftPanel>
 				<Body>
-					<Button />
+					<JorunalForm onSubmit={pushItem}></JorunalForm>
 				</Body>
 			</div>
 		</>
