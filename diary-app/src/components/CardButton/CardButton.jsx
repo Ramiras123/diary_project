@@ -1,8 +1,8 @@
-import './CardButton.css';
+import styles from './CardButton.module.css';
 import cn from 'classnames';
 
 function CardButton({ children, className }) {
-	const cl = cn('card-button', {
+	const cl = cn(styles['card-button'], {
 		[`${className}`]: className
 	});
 	return <button className={cl}>{children}</button>;

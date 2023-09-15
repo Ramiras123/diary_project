@@ -1,11 +1,11 @@
-import './JournalList.css';
+import styles from './JournalList.module.css';
 import CardButton from '../CardButton/CardButton';
 import JournalItem from '../Journalitem/Journalitem';
 
 function JournalList({ items }) {
 	if (items.length === 0) {
 		return (
-			<div className="journal-list">
+			<div className={styles['journal-list']}>
 				<p>Данных еще нет</p>
 			</div>
 		);
@@ -17,7 +17,7 @@ function JournalList({ items }) {
 	};
 
 	return (
-		<div className="journal-list">
+		<div className={styles['journal-list']}>
 			{items.sort(sortedItems).map((el) => (
 				<CardButton key={el.id}>
 					<JournalItem title={el.title} date={el.date} text={el.text} />

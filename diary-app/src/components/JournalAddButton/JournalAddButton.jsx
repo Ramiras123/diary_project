@@ -1,9 +1,9 @@
 import CardButton from '../CardButton/CardButton';
-import './JournalAddButton.css';
+import styles from './JournalAddButton.module.css';
 
 function JournalAddButton() {
 	return (
-		<CardButton className="journal-add">
+		<CardButton className={styles['journal-add']}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="20"
