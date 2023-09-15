@@ -1,6 +1,7 @@
-import './JorunalForm.css';
+import styles from './JorunalForm.module.css';
 import Button from '../Button/Button';
 import { useState } from 'react';
+import cn from 'classnames';
 
 function JorunalForm({ onSubmit }) {
 	const [formValidState, setFormValidState] = useState({
@@ -40,24 +41,46 @@ function JorunalForm({ onSubmit }) {
 
 	return (
 		<>
-			<form className="journal-form" onSubmit={addJournalItem}>
-				<input
-					type="title"
-					name="title"
-					className={`input ${formValidState.title ? '' : 'invalid'}`}
-				/>
-				<input
-					type="date"
-					name="date"
-					className={`input ${formValidState.date ? '' : 'invalid'}`}
-				/>
-				<input type="text" name="tag" />
+			<form className={styles['journal-form']} onSubmit={addJournalItem}>
+				<div>
+					{' '}
+					<input
+						type="title"
+						name="title"
+						className={cn(styles['input-title'], {
+							[styles['invalid']]: !formValidState.title
+						})}
+					/>
+				</div>
+				<div className={styles['form-row']}>
+					<label htmlFor="date" className={styles['form-label']}>
+						<img src="/date.svg" alt="" />
+						<span>Дата</span>
+					</label>
+					<input
+						type="date"
+						name="date"
+						id="date"
+						className={cn(styles['input'], {
+							[styles['invalid']]: !formValidState.date
+						})}
+					/>
+				</div>
+				<div className={styles['form-row']}>
+					<label htmlFor="tag" className={styles['form-label']}>
+						<img src="/folder.svg" alt="" />
+						<span>Метки</span>
+					</label>
+					<input type="text" id="tag" name="tag" className={styles['input']}/>
+				</div>
 				<textarea
 					name="text"
 					id=""
 					cols="30"
 					rows="10"
-					className={`input ${formValidState.text ? '' : 'invalid'}`}
+					className={cn(styles['input'], {
+						[styles['invalid']]: !formValidState.text
+					})}
 				></textarea>
 				<Button text={'Сохранить'}></Button>
 			</form>
