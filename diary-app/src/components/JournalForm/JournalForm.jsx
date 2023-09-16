@@ -1,15 +1,35 @@
 import styles from './JorunalForm.module.css';
 import Button from '../Button/Button';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import cn from 'classnames';
 import { INITIAL_STATE, formReduce } from './JorunalForm.state';
+import Input from '../Input/Input';
 
 function JorunalForm({ onSubmit }) {
 	const [formState, dispatchForm] = useReducer(formReduce, INITIAL_STATE);
 	const { isValid, values, isFormReadyToSubmit } = formState;
+	const titleRef = useRef();
+	const dateRef = useRef();
+	const textRef = useRef();
+
+	const focuseError = (isValid) => {
+		switch (true) {
+		case !isValid.title:
+			titleRef.current.focus();
+			break;
+		case !isValid.date:
+			dateRef.current.focus();
+			break;
+		case !isValid.text:
+			textRef.current.focus();
+			break;
+		}
+	};
+
 	useEffect(() => {
 		let timerValidState;
 		if (!isValid.title || !isValid.text || !isValid.date) {
+			focuseError(isValid);
 			timerValidState = setTimeout(
 				() => dispatchForm({ type: 'RESET_VALIDITY' }),
 				2000
@@ -26,6 +46,7 @@ function JorunalForm({ onSubmit }) {
 			dispatchForm({ type: 'CLEAR' });
 		}
 	}, [isFormReadyToSubmit, values, onSubmit]);
+
 	const addJournalItem = (e) => {
 		e.preventDefault();
 		dispatchForm({ type: 'SUBMIT' });
@@ -42,14 +63,14 @@ function JorunalForm({ onSubmit }) {
 			<form className={styles['journal-form']} onSubmit={addJournalItem}>
 				<div>
 					{' '}
-					<input
+					<Input
 						type="title"
 						name="title"
+						ref={titleRef}
 						onChange={onChange}
 						value={values.title}
-						className={cn(styles['input-title'], {
-							[styles['invalid']]: !isValid.title
-						})}
+						isValid={isValid.title}
+						appearence="title"
 					/>
 				</div>
 				<div className={styles['form-row']}>
@@ -57,15 +78,14 @@ function JorunalForm({ onSubmit }) {
 						<img src="/date.svg" alt="" />
 						<span>Дата</span>
 					</label>
-					<input
+					<Input
 						type="date"
 						name="date"
+						ref={dateRef}
 						onChange={onChange}
 						value={values.date}
+						isValid={isValid.date}
 						id="date"
-						className={cn(styles['input'], {
-							[styles['invalid']]: !isValid.date
-						})}
 					/>
 				</div>
 				<div className={styles['form-row']}>
@@ -73,18 +93,18 @@ function JorunalForm({ onSubmit }) {
 						<img src="/folder.svg" alt="" />
 						<span>Метки</span>
 					</label>
-					<input
+					<Input
 						type="text"
 						id="tag"
 						name="tag"
 						onChange={onChange}
 						value={values.tag}
-						className={styles['input']}
 					/>
 				</div>
 				<textarea
 					name="text"
 					id=""
+					ref={textRef}
 					cols="30"
 					rows="10"
 					onChange={onChange}
