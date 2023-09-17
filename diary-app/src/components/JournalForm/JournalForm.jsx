@@ -1,9 +1,10 @@
 import styles from './JorunalForm.module.css';
 import Button from '../Button/Button';
-import { useEffect, useReducer, useRef } from 'react';
+import { useContext, useEffect, useReducer, useRef } from 'react';
 import cn from 'classnames';
 import { INITIAL_STATE, formReduce } from './JorunalForm.state';
 import Input from '../Input/Input';
+import { UserContext } from '../../context/user.context';
 
 function JorunalForm({ onSubmit }) {
 	const [formState, dispatchForm] = useReducer(formReduce, INITIAL_STATE);
@@ -11,6 +12,7 @@ function JorunalForm({ onSubmit }) {
 	const titleRef = useRef();
 	const dateRef = useRef();
 	const textRef = useRef();
+	const { userId } = useContext(UserContext);
 
 	const focuseError = (isValid) => {
 		switch (true) {
@@ -62,7 +64,7 @@ function JorunalForm({ onSubmit }) {
 		<>
 			<form className={styles['journal-form']} onSubmit={addJournalItem}>
 				<div>
-					{' '}
+					{userId}
 					<Input
 						type="title"
 						name="title"
