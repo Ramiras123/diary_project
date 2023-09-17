@@ -16,15 +16,15 @@ function JorunalForm({ onSubmit }) {
 
 	const focuseError = (isValid) => {
 		switch (true) {
-		case !isValid.title:
-			titleRef.current.focus();
-			break;
-		case !isValid.date:
-			dateRef.current.focus();
-			break;
-		case !isValid.text:
-			textRef.current.focus();
-			break;
+			case !isValid.title:
+				titleRef.current.focus();
+				break;
+			case !isValid.date:
+				dateRef.current.focus();
+				break;
+			case !isValid.text:
+				textRef.current.focus();
+				break;
 		}
 	};
 
@@ -56,15 +56,21 @@ function JorunalForm({ onSubmit }) {
 	const onChange = (e) => {
 		dispatchForm({
 			type: 'SET_VALUE',
-			payload: { [e.target.name]: e.target.value }
+			payload: { [e.target.name]: e.target.value, userId }
 		});
 	};
+
+	useEffect(() => {
+		dispatchForm({
+			type: 'SET_VALUE',
+			payload: { userId }
+		});
+	}, [userId]);
 
 	return (
 		<>
 			<form className={styles['journal-form']} onSubmit={addJournalItem}>
 				<div>
-					{userId}
 					<Input
 						type="title"
 						name="title"
