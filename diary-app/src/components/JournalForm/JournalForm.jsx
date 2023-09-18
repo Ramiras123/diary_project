@@ -6,7 +6,7 @@ import { INITIAL_STATE, formReduce } from './JorunalForm.state';
 import Input from '../Input/Input';
 import { UserContext } from '../../context/user.context';
 
-function JorunalForm({ onSubmit }) {
+function JorunalForm({ onSubmit, selectItem, setDelete }) {
 	const [formState, dispatchForm] = useReducer(formReduce, INITIAL_STATE);
 	const { isValid, values, isFormReadyToSubmit } = formState;
 	const titleRef = useRef();
@@ -29,6 +29,20 @@ function JorunalForm({ onSubmit }) {
 	};
 
 	useEffect(() => {
+		if (!selectItem) {
+			dispatchForm({ type: 'CLEAR' });
+			dispatchForm({
+				type: 'SET_VALUE',
+				payload: { userId }
+			});
+		}
+		dispatchForm({
+			type: 'SET_VALUE',
+			payload: { ...selectItem }
+		});
+	}, [selectItem, userId]);
+
+	useEffect(() => {
 		let timerValidState;
 		if (!isValid.title || !isValid.text || !isValid.date) {
 			focuseError(isValid);
@@ -46,8 +60,12 @@ function JorunalForm({ onSubmit }) {
 		if (isFormReadyToSubmit) {
 			onSubmit(values);
 			dispatchForm({ type: 'CLEAR' });
+			dispatchForm({
+				type: 'SET_VALUE',
+				payload: { userId }
+			});
 		}
-	}, [isFormReadyToSubmit, values, onSubmit]);
+	}, [isFormReadyToSubmit, values, onSubmit, userId]);
 
 	const addJournalItem = (e) => {
 		e.preventDefault();
@@ -61,16 +79,26 @@ function JorunalForm({ onSubmit }) {
 	};
 
 	useEffect(() => {
+		dispatchForm({ type: 'CLEAR' });
 		dispatchForm({
 			type: 'SET_VALUE',
 			payload: { userId }
 		});
 	}, [userId]);
 
+	const formdelete = () => {
+		setDelete(selectItem.id);
+		dispatchForm({ type: 'CLEAR' });
+		dispatchForm({
+			type: 'SET_VALUE',
+			payload: { userId }
+		});
+	};
+
 	return (
 		<>
 			<form className={styles['journal-form']} onSubmit={addJournalItem}>
-				<div>
+				<div className={styles['form-row']}>
 					<Input
 						type="title"
 						name="title"
@@ -80,6 +108,15 @@ function JorunalForm({ onSubmit }) {
 						isValid={isValid.title}
 						appearence="title"
 					/>
+					{selectItem?.id && (
+						<button
+							className={styles['btn-delete']}
+							type="button"
+							onClick={formdelete}
+						>
+							<img src="/archiv.svg" alt="Кнопка удаления" />
+						</button>
+					)}
 				</div>
 				<div className={styles['form-row']}>
 					<label htmlFor="date" className={styles['form-label']}>
@@ -91,7 +128,11 @@ function JorunalForm({ onSubmit }) {
 						name="date"
 						ref={dateRef}
 						onChange={onChange}
-						value={values.date}
+						value={
+							values.date
+								? new Date(values.date).toISOString().slice(0, 10)
+								: ''
+						}
 						isValid={isValid.date}
 						id="date"
 					/>
@@ -121,7 +162,7 @@ function JorunalForm({ onSubmit }) {
 						[styles['invalid']]: !isValid.text
 					})}
 				></textarea>
-				<Button text={'Сохранить'}></Button>
+				<Button>Сохранить</Button>
 			</form>
 		</>
 	);

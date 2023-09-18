@@ -6,7 +6,7 @@
 .form-row {
 	display: flex;
 	align-items: center;
-	padding: 15px;
+	padding: 15px 0;
 	border-bottom: 1px solid #333333;
 }
 .form-label {
@@ -36,4 +36,17 @@
 .invalid {
 	border: 3px solid red;
 	background: rgb(185, 39, 39);
+}
+
+.btn-delete {
+	background: none;
+	border: none;
+	padding: 0;
+	width: 30px;
+	height: 30px;
+}
+
+.btn-delete:hover {
+	background-color: rgb(255, 255, 255, 0.05);
+	border-radius: 50%;
 }

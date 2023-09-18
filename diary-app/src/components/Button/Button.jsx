@@ -1,11 +1,12 @@
+import { memo } from 'react';
 import styles from './Button.module.css';
 import cn from 'classnames';
-function Button({ text, onClick }) {
+function Button({ children, onClick }) {
 	return (
 		<button className={cn(styles.button, styles.accent)} onClick={onClick}>
-			{text}
+			{children}
 		</button>
 	);
 }
 
-export default Button;
+export default memo(Button);

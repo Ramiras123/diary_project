@@ -4,7 +4,7 @@ import JournalItem from '../Journalitem/Journalitem';
 import { useContext } from 'react';
 import { UserContext } from '../../context/user.context';
 
-function JournalList({ items }) {
+function JournalList({ items, setItem }) {
 	const { userId } = useContext(UserContext);
 	if (items.length === 0) {
 		return (
@@ -18,17 +18,17 @@ function JournalList({ items }) {
 			return 1;
 		} else return -1;
 	};
+	const filterItems = items
+		.filter((el) => el.userId === userId)
+		.sort(sortedItems);
 
 	return (
 		<div className={styles['journal-list']}>
-			{items
-				.filter((el) => el.userId === userId)
-				.sort(sortedItems)
-				.map((el) => (
-					<CardButton key={el.id}>
-						<JournalItem title={el.title} date={el.date} text={el.text} />
-					</CardButton>
-				))}
+			{filterItems.map((el) => (
+				<CardButton key={el.id} onClick={() => setItem(el)}>
+					<JournalItem title={el.title} date={el.date} text={el.text} />
+				</CardButton>
+			))}
 		</div>
 	);
 }
